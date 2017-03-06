@@ -55,17 +55,17 @@ tf.app.flags.DEFINE_integer("batch_size", 64,
                             "Batch size to use during training.")
 tf.app.flags.DEFINE_integer("size", 1024, "Size of each model layer.")
 tf.app.flags.DEFINE_integer("num_layers", 3, "Number of layers in the model.")
-tf.app.flags.DEFINE_integer("from_vocab_size", 40000, "English vocabulary size.")
-tf.app.flags.DEFINE_integer("to_vocab_size", 40000, "French vocabulary size.")
+tf.app.flags.DEFINE_integer("from_vocab_size", 2500, "English vocabulary size.")
+tf.app.flags.DEFINE_integer("to_vocab_size", 2500, "French vocabulary size.")
 tf.app.flags.DEFINE_string("data_dir", "/tmp", "Data directory")
-tf.app.flags.DEFINE_string("train_dir", "/tmp", "Training directory.")
+tf.app.flags.DEFINE_string("train_dir", "./trained_models", "Training directory.")
 tf.app.flags.DEFINE_string("from_train_data", None, "Training data.")
 tf.app.flags.DEFINE_string("to_train_data", None, "Training data.")
 tf.app.flags.DEFINE_string("from_dev_data", None, "Training data.")
 tf.app.flags.DEFINE_string("to_dev_data", None, "Training data.")
 tf.app.flags.DEFINE_integer("max_train_data_size", 0,
                             "Limit on the size of training data (0: no limit).")
-tf.app.flags.DEFINE_integer("steps_per_checkpoint", 200,
+tf.app.flags.DEFINE_integer("steps_per_checkpoint", 10,
                             "How many training steps to do per checkpoint.")
 tf.app.flags.DEFINE_boolean("decode", False,
                             "Set to True for interactive decoding.")
@@ -201,7 +201,9 @@ def train():
     step_time, loss = 0.0, 0.0
     current_step = 0
     previous_losses = []
+    print("reaches while loop")
     while True:
+      print("looping")
       # Choose a bucket according to data distribution. We pick a random number
       # in [0, 1] and use the corresponding interval in train_buckets_scale.
       random_number_01 = np.random.random_sample()
@@ -292,6 +294,13 @@ def decode():
       if data_utils.EOS_ID in outputs:
         outputs = outputs[:outputs.index(data_utils.EOS_ID)]
       # Print out French sentence corresponding to outputs.
+      #print(outputs)
+      #print(len(rev_fr_vocab))
+      #if random.randint(0, 10) <= 3:
+	#print("Delete Humans" + " ".join([tf.compat.as_str(rev_fr_vocab[output]) for output in outputs if output < len(rev_fr_vocab)]))
+      #else: 
+         #print(" ".join([tf.compat.as_str(rev_fr_vocab[output]) for output in outputs if output < len(rev_fr_vocab)]))
+      print(outputs)
       print(" ".join([tf.compat.as_str(rev_fr_vocab[output]) for output in outputs]))
       print("> ", end="")
       sys.stdout.flush()
